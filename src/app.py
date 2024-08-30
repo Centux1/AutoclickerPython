@@ -302,6 +302,7 @@ class Clicker(threading.Thread):
         self.click_loop_thread = None
 
     def click_loop(self, button, cps):
+
         # accuracy calculation
         actual_cps = -0.0007301777170198202*cps**2 + 0.9913716678058782*cps + 0.1362499999999756
         proc_diff = round(((actual_cps-cps)/cps), 3)*(-1)
@@ -311,27 +312,37 @@ class Clicker(threading.Thread):
         while self.is_running:
             pyautogui.click(button=button)
             pyautogui.PAUSE = pause
-            
-    def on_press(self, key):
+        
+
+    def on_press(self, key): #Keyboard button
         key = str(key).replace("'", "")
 
         if self.clmb[3] == 0:
             if not self.is_running:
                 if key == self.clmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
-                    self.click_loop_thread.start()
+
+                    if self.clmb[1] == 0:
+                        pyautogui.mouseDown(button="left")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
+                        self.click_loop_thread.start()
 
         elif self.clmb[3] == 1:
             if self.is_running:
                 if key == self.clmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='left')
             
             elif not self.is_running:
                 if key == self.clmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
-                    self.click_loop_thread.start()
+
+                    if self.clmb[1] == 0:
+                        pyautogui.mouseDown(button="left")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
+                        self.click_loop_thread.start()
 
         #---------------------------#
 
@@ -339,19 +350,28 @@ class Clicker(threading.Thread):
             if not self.is_running:
                 if key == self.crmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
-                    self.click_loop_thread.start()
+
+                    if self.crmb[1] == 0:
+                        pyautogui.mouseDown(button="right")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.crmb[1]))
+                        self.click_loop_thread.start()
 
         elif self.crmb[3] == 1:
             if self.is_running:
                 if key == self.crmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='right')
 
             elif not self.is_running:     
                 if key == self.crmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
-                    self.click_loop_thread.start()  
+                    
+                    if self.crmb[1] == 0:
+                        pyautogui.mouseDown(button="right")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.crmb[1]))
+                        self.click_loop_thread.start()
 
     def on_release(self, key):
         key = str(key).replace("'", "")
@@ -364,28 +384,45 @@ class Clicker(threading.Thread):
             if key == self.crmb[2]:
                 self.is_running = False
 
-    def on_click(self, x, y, button, pressed):
+    def on_click(self, x, y, button, pressed): #Mous Button
+
         if self.clmb[3] == 0:
             if not self.is_running and pressed:
                 if str(button) == self.clmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
-                    self.click_loop_thread.start()
+
+                    print("1")
+                    print(self.clmb[1])
+
+                    if self.clmb[1] == 0:
+                        pyautogui.mouseDown(button="left")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
+                        self.click_loop_thread.start()
 
             elif self.is_running and not pressed:
                 if str(button) == self.clmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='left')
 
         elif self.clmb[3] == 1:
             if self.is_running and pressed:
                 if str(button) == self.clmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='left')
 
             elif not self.is_running and pressed:
                 if str(button) == self.clmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
-                    self.click_loop_thread.start()
+
+                    print("2")
+                    print(self.clmb[1])
+                    
+                    if self.clmb[1] == 0:
+                        pyautogui.mouseDown(button="left")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("left", self.clmb[1]))
+                        self.click_loop_thread.start()
         
         #---------------------------#
 
@@ -393,23 +430,33 @@ class Clicker(threading.Thread):
             if not self.is_running and pressed:
                 if str(button) == self.crmb[2]:
                         self.is_running = True
-                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
-                        self.click_loop_thread.start()
+
+                        if self.crmb[1] == 0:
+                            pyautogui.mouseDown(button="right")
+                        else:
+                            self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
+                            self.click_loop_thread.start()
 
             elif self.is_running and not pressed:
                 if str(button) == self.crmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='right')
 
         elif self.crmb[3] == 1:
             if self.is_running and pressed:
                 if str(button) == self.crmb[2]:
                     self.is_running = False
+                    pyautogui.mouseUp(button='right')
 
             elif not self.is_running and pressed:
                 if str(button) == self.crmb[2]:
                     self.is_running = True
-                    self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
-                    self.click_loop_thread.start()
+
+                    if self.crmb[1] == 0:
+                        pyautogui.mouseDown(button="right")
+                    else:
+                        self.click_loop_thread = threading.Thread(target=self.click_loop, args=("right", self.crmb[1]))
+                        self.click_loop_thread.start()
 
     def stop(self):
         if self.keyboard_listener:
